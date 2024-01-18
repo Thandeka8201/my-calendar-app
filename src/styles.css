@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+body{
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Basic styling for the availability slots */
+.availability-slot {
+    display: inline-block;
+    padding: 8px;
+    margin: 4px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+  
+  /* Style for FULL slots */
+  .availability-slot.full {
+    background-color: red;
+    color: #fff; /* Text color for better visibility */
+    cursor: not-allowed;
+  }
+  
+  /* Style for UNAVAILABLE slots */
+  .availability-slot.unavailable {
+    background-color: lightgrey;
+    cursor: not-allowed;
+  }
+  
+  /* Style for AVAILABLE slots */
+  .availability-slot.available {
+    background-color: white;
+    color: #fff; /* Text color for better visibility */
+  }
+  
+  /* Style for SELECTED slots */
+  .availability-slot.selected {
+    background-color:green;
+    cursor: not-allowed;
+  }
+  
+  /* Responsive styling to hide columns on small screens */
+  @media screen and (max-width: 768px) {
+    .availability-table .day-column {
+      display: none;
+    }
+}
