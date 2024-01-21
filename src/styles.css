@@ -30,6 +30,7 @@ body{
   .availability-slot.available {
     background-color: white;
     color: #fff; /* Text color for better visibility */
+    cursor: pointer;
   }
   
   /* Style for SELECTED slots */

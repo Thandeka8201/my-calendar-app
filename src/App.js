@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import AvailabilityCalendar from './AvailabilityCalendar';
+import AvailabilityTable from './AvailabilityCalendar';
+import {availabilityData} from './logic';
 import './styles.css';
 
 const App = () => {
   
   //Set the initial job length
-  const initialJobLength = 2;
+  const initialJobLength = 1;
 
   //State to hold the selected job length
   const [selectedJobLength, setSelectedJobLength] = useState(initialJobLength);
@@ -30,7 +31,7 @@ const App = () => {
         value={selectedJobLength} 
         onChange={handleSliderChange} 
       />
-      <AvailabilityCalendar jobLength = {selectedJobLength}/>
+      <AvailabilityTable date="2016-05-16" jobLength={selectedJobLength} availabilityData={availabilityData}/>
       
     </div>
   );

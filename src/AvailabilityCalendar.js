@@ -1,58 +1,52 @@
-import React, {useEffect, useState} from "react";
-import { checkSlotAvailability } from "./logic";
+import React from 'react';
+import { checkSlotAvailability, availabilityData } from './logic';
+import './styles.css';
 
-const AvailabilityCalendar = ({jobLength}) => {
-
-    const [selectedSlots, setSelectedSlots] = useState([]);
-    const [availabilityData, setAvailabilityData] = useState([]);
-
-    //Fetch availability data
-    useEffect(() => {
-        import (`./logic.json`).then(data => {
-            setAvailabilityData(data);
-        });
-    }, []);
-
-    //Function to handle slot click
-    const handleSlotClick = (time, date) => {
-        const result = checkSlotAvailability(time, jobLength, date, availabilityData);
-
-        if(result === 'AVAILABLE'){
-            const updatedSelectedSlots = [...selectedSlots, {time, date}];
-            setSelectedSlots(updatedSelectedSlots);
-        }
+const AvailabilityTable = ({ date, jobLength }) => {
+  const workingHours = [9, 10, 11, 12, 13, 14, 15, 16, 17];
+  
+    // Function to get the class name based on availability status
+    const getClassName = (availabilityStatus) => {
+      switch (availabilityStatus) {
+        case 'FULL':
+          return 'availability-slot full';
+        case 'UNAVAILABLE':
+          return 'availability-slot unavailable';
+        case 'AVAILABLE':
+          return 'availability-slot available';
+        default:
+          return 'availability-slot selected';
+      }
     };
-
-    //Function to render slots based on availability and selected state
-    const renderSlots = () => {
-        return availabilityData.map(({Date, HoursAvailable}) => (
-            <div key={Date}>
-                <h3>Date</h3>
-                {HoursAvailable.map(hour => {
-                    const result = checkSlotAvailability(hour, jobLength, Date, availabilityData);
-                    const isSelected = selectedSlots.some(slot => slot.time === hour && slot.date === Date);
-
-                    return(
-                        <div
-                        key = {hour}
-                        className = {`availability-slot ${result.toLowerCase()}`}
-                        /*{result === 'FULL' ? 'Full' : result === 'UNAVAILABLE' ? 'Unavailable' : isSelected ? 'Selected' : 'Available'}*/
-                        onClick ={() => handleSlotClick(hour, Date)} 
-                        >
-                        {hour}:00 - {result === 'AVAILABLE' && isSelected ? 'Selected' : result}
-                        </div>
-                    );
-                })}
-            </div>
-        ));
-    };
-
-    return(
-        <div className="availability-slot">
-           {/*Render slots*/}
-           {renderSlots()}
-        </div>
+  
+    // Generate table rows based on availability data
+    const tableRows = workingHours.map((startHour) => {
+      const endHour = startHour + 1;
+      const availabilityStatus = checkSlotAvailability(startHour, jobLength, date, availabilityData);
+      const className = getClassName(availabilityStatus);
+  
+      return (
+        <tr key={startHour}>
+          <td>{`${startHour}:00 - ${endHour}:00`}</td>
+          <td className={className}>{availabilityStatus}</td>
+        </tr>
+      );
+    });
+  
+    return (
+      <div>
+        <h2>Availability Table for {date}</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Time Range</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>{tableRows}</tbody>
+        </table>
+      </div>
     );
-};
+  };
 
-export default AvailabilityCalendar;
+export default AvailabilityTable;
